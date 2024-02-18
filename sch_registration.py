@@ -1,45 +1,47 @@
-
-
+from fastapi import APIRouter, HTTPException, Depends
+from db import get_db
+import pyodbc
 from pydantic import BaseModel
-
 import random
 import string
-from db import get_db
 
+class SchoolRegistration(BaseModel):
+    D_NO: str
+    STREET: str
+    AREA: str
+    CITY: str
+    DISTRICT: str
+    STATE: str
+    PIN_CODE: str
+    GEO_TAG: str
+    SCHOOL_NAME: str
+    SYLLABUS_TYPE: str
+    ADH_NAME: str
+    ADH_MOBILE: str
+    ADH_EMAIL: str
 
-# Define FastAPI instance
-from fastapi import APIRouter
 sch_router = APIRouter()
 
-# Database connection parameters
+@sch_router.post("/schregister")
+async def register_school(school: SchoolRegistration):
+    # Generate SCHOOL_ID and PASSWORD
+    SCHOOL_ID = school.CITY[:3] + school.SCHOOL_NAME[:3] + ''.join(random.choices(string.digits, k=4))
+    PASSWORD = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    db =  get_db()
+    cursor = db.cursor()
 
+    # Insert into schools table
+    cursor.execute(
+        "INSERT INTO schools (SCHOOL_ID, SCHOOL_NAME, SYLLABUS_TYPE, ADH_NAME, ADH_MOBILE, ADH_EMAIL, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        SCHOOL_ID, school.SCHOOL_NAME, school.SYLLABUS_TYPE, school.ADH_NAME, school.ADH_MOBILE, school.ADH_EMAIL, PASSWORD
+    )
 
-# Define Pydantic model for School
-class School(BaseModel):
-    name: str
-    head_name: str
-    address: str
-    head_email: str
-    head_mobile: str
+    # Insert into address table
+    cursor.execute(
+        "INSERT INTO address_final (ID, MOBILE, D_NO, STREET, AREA, CITY, DISTRICT, STATE, PIN_CODE, GEO_TAG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        SCHOOL_ID, school.ADH_MOBILE, school.D_NO, school.STREET, school.AREA, school.CITY, school.DISTRICT, school.STATE, school.PIN_CODE, school.GEO_TAG
+    )
 
-# Generate school ID
-def generate_school_id(name):
-    prefix = name[:3].upper()  # First 3 letters of school name
-    suffix = ''.join(random.choices(string.digits, k=4))  # Random 4-digit number
-    return f'LOC{prefix}{suffix}'
+    db.commit()
 
-
-@sch_router.post("/schools/")
-async def create_school(school: School):
-    school_id = generate_school_id(school.name)
-    cnxn = get_db()
-    cursor = cnxn.cursor()
-    cursor.execute("INSERT INTO schools (school_id, name, head_name, address, head_email, head_mobile) VALUES (?, ?, ?, ?, ?, ?)",
-                   (school_id, school.name, school.head_name, school.address, school.head_email, school.head_mobile))
-    cnxn.commit()
-
-    create_database_query = f"CREATE DATABASE {school.name};"
-    cursor.execute(create_database_query)
-    cnxn.commit()
-    
-    return {"school_id": school_id, **school.dict()}
+    return {"SCHOOL_ID": SCHOOL_ID, "PASSWORD": PASSWORD}
