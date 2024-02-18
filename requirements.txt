@@ -37,7 +37,7 @@ constantly==23.10.4
 contourpy==1.0.5
 cookiecutter==2.1.1
 cycler==0.11.0
-dask==2024.2.0
+# dask==2024.2.0
 debugpy==1.6.4
 decorator==5.1.1
 deep-translator==1.11.4
