@@ -266,6 +266,6 @@ zict==3.0.0
 zipp==3.17.0
 zope.event==5.0
 zope.interface==6.1
-fastapi==0.70.0
+fastapi
 pydantic==1.8.2
 pyodbc==4.0.32
