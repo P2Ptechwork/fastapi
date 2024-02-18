@@ -3,10 +3,13 @@ from sch_registration import sch_router
 from st_registration import st_router
 from fastapi.middleware.cors import CORSMiddleware
 
+
+
 app = FastAPI()
 
 origins = [
-    "https://jolly-sea-09141a40f.4.azurestaticapps.net",  # Replace with the origin of your frontend
+    "https://jolly-sea-09141a40f.4.azurestaticapps.net",  # Replace with your frontend origin
+    # "http://localhost:3000",  # Add more origins if needed
 ]
 
 app.add_middleware(
@@ -16,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Your routes go here
 
 
 
