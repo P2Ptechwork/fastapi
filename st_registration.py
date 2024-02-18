@@ -7,7 +7,7 @@ from fastapi import APIRouter
 
 st_router = APIRouter()
 
-from db import cursor, cnxn
+from db import get_db
 
 class Student(BaseModel):
     SCHOOL_ID: str
@@ -32,7 +32,8 @@ class Student(BaseModel):
 @st_router.post("/st_register")
 async def register_student_endpoint(student: Student):
     data = student.dict()
-
+    cnxn = get_db()
+    cursor = cnxn.cursor()
     # Generate student ID
     school_id = data['SCHOOL_ID']
     student_id = school_id[:2] + "SC" + "000001"  # Adjust this as needed

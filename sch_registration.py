@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 import random
 import string
-from db import cursor, cnxn
+from db import get_db
 
 
 # Define FastAPI instance
@@ -32,7 +32,8 @@ def generate_school_id(name):
 @sch_router.post("/schools/")
 async def create_school(school: School):
     school_id = generate_school_id(school.name)
-    
+    cnxn = get_db()
+    cursor = cnxn.cursor()
     cursor.execute("INSERT INTO schools (school_id, name, head_name, address, head_email, head_mobile) VALUES (?, ?, ?, ?, ?, ?)",
                    (school_id, school.name, school.head_name, school.address, school.head_email, school.head_mobile))
     cnxn.commit()

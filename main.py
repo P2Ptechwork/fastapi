@@ -5,10 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 
-app = FastAPI()
-
+app = FastAPI(docs_url="/docs")
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 origins = [
-    "https://jolly-sea-09141a40f.4.azurestaticapps.net",  # Replace with your frontend origin
+    "https://jolly-sea-09141a40f.4.azurestaticapps.net",
+      "http://localhost:3000"  # Replace with your frontend origin
     # "http://localhost:3000",  # Add more origins if needed
 ]
 
