@@ -27,7 +27,7 @@ tea_router = APIRouter()
 @tea_router.post("/tregister")
 async def register_teacher(teacher: TeacherRegistration, db=Depends(get_db)):
     # Generate TEACHER_ID and PASSWORD
-    TEACHER_ID = teacher.TEACHER_NAME[:3] + teacher.SCHOOL_ID[3:6] + ''.join(random.choices(string.digits, k=4))
+    TEACHER_ID = 't'+teacher.TEACHER_NAME[:2] + teacher.SCHOOL_ID[3:6] + ''.join(random.choices(string.digits, k=4))
     PASSWORD = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
 
     cursor = db.cursor()
@@ -40,7 +40,7 @@ async def register_teacher(teacher: TeacherRegistration, db=Depends(get_db)):
 
     # Insert into address table
     cursor.execute(
-        "INSERT INTO address_final (ID, MOBILE, D_NO, STREET, AREA, CITY, DISTRICT, STATE, PIN_CODE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO address (ID, MOBILE, D_NO, STREET, AREA, CITY, DISTRICT, STATE, PIN_CODE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         TEACHER_ID, teacher.TEACHER_MOBILE, teacher.D_NO, teacher.STREET, teacher.AREA, teacher.CITY, teacher.DISTRICT, teacher.STATE, teacher.PIN_CODE
     )
 

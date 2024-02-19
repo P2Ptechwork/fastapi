@@ -38,7 +38,7 @@ async def register_school(school: SchoolRegistration):
 
     # Insert into address table
     cursor.execute(
-        "INSERT INTO address_final (ID, MOBILE, D_NO, STREET, AREA, CITY, DISTRICT, STATE, PIN_CODE, GEO_TAG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO address (ID, MOBILE, D_NO, STREET, AREA, CITY, DISTRICT, STATE, PIN_CODE, GEO_TAG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         SCHOOL_ID, school.ADH_MOBILE, school.D_NO, school.STREET, school.AREA, school.CITY, school.DISTRICT, school.STATE, school.PIN_CODE, school.GEO_TAG
     )
 

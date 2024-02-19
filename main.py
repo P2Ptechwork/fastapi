@@ -1,8 +1,8 @@
 from fastapi import FastAPI, APIRouter
-from sch_registration import sch_router
-from st_registration import st_router
-from sch_login import schl_router
-from tea_registration import tea_router
+from webpage.sch_registration import sch_router
+from webpage.st_registration import st_router
+from webpage.sch_login import schl_router
+from webpage.tea_registration import tea_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
