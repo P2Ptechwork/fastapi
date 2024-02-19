@@ -36,7 +36,7 @@ async def register_student_endpoint(student: Student):
     cursor = cnxn.cursor()
     # Generate student ID
     school_id = data['SCHOOL_ID']
-    student_id = school_id[:2] + "SC" + "000001"  # Adjust this as needed
+    student_id = "s"+school_id[:2] + school_id[3:5] +{data['GRADE']}+ ''.join(random.choices(string.digits, k=3))  # Adjust this as needed
 
     # Generate a random password
     password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
@@ -50,7 +50,7 @@ async def register_student_endpoint(student: Student):
 
     # Insert into address table
     address_query = f"""
-    INSERT INTO address_final (ID, MOBILE, D_NO, STREET, AREA, CITY, DISTRICT, STATE, PIN_CODE, GEO_TAG)
+    INSERT INTO address (ID, MOBILE, D_NO, STREET, AREA, CITY, DISTRICT, STATE, PIN_CODE, GEO_TAG)
     VALUES ('{student_id}', '{data['GUARDIAN_MOBILE']}', '{data['D_NO']}', '{data['STREET']}', '{data['AREA']}', '{data['CITY']}', '{data['DISTRICT']}', '{data['STATE']}', '{data['PIN_CODE']}', '')
     """
     cursor.execute(address_query)
