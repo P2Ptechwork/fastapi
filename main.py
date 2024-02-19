@@ -1,6 +1,8 @@
 from fastapi import FastAPI, APIRouter
 from sch_registration import sch_router
 from st_registration import st_router
+from sch_login import schl_router
+from tea_registration import tea_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -29,3 +31,5 @@ app.add_middleware(
 
 app.include_router(sch_router)
 app.include_router(st_router)
+app.include_router(schl_router)
+app.include_router(tea_router)
