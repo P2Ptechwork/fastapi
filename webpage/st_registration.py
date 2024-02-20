@@ -35,8 +35,19 @@ async def register_student_endpoint(student: Student):
     cnxn = get_db()
     cursor = cnxn.cursor()
     # Generate student ID
+    random_int = str(random.randint(100, 999))
     school_id = data['SCHOOL_ID']
-    student_id = "s"+school_id[:2] + school_id[3:5] +{data['GRADE']}+ ''.join(random.choices(string.digits, k=3))  # Adjust this as needed
+    grade_str = data['GRADE'].zfill(2)
+    student_id = "S" + school_id[:2] + school_id[3:5] + grade_str + random_int
+
+# Assuming school_id and grade are defined
+
+
+# Format grade to be two digits
+
+
+
+# Construct student_id
 
     # Generate a random password
     password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
