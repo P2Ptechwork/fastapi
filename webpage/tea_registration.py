@@ -5,6 +5,8 @@ from pydantic import BaseModel
 import random
 import string
 
+from typing import List
+
 class TeacherRegistration(BaseModel):
     SCHOOL_ID: str
     TEACHER_NAME: str
@@ -13,7 +15,6 @@ class TeacherRegistration(BaseModel):
     TEACHER_MOBILE: str
     TEACHER_EMAIL: str
     DOC_ID: str
-
     D_NO: str
     STREET: str
     AREA: str
@@ -21,13 +22,16 @@ class TeacherRegistration(BaseModel):
     DISTRICT: str
     STATE: str
     PIN_CODE: str
+    SUBJECTS: List[str]
 
 tea_router = APIRouter()
 
 @tea_router.post("/tregister")
+
+
 async def register_teacher(teacher: TeacherRegistration, db=Depends(get_db)):
     # Generate TEACHER_ID and PASSWORD
-    TEACHER_ID = 't'+teacher.TEACHER_NAME[:2] + teacher.SCHOOL_ID[3:6] + ''.join(random.choices(string.digits, k=4))
+    TEACHER_ID = ('t'+teacher.TEACHER_NAME[:2] + teacher.SCHOOL_ID[3:6] + ''.join(random.choices(string.digits, k=4))).upper()
     PASSWORD = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
 
     cursor = db.cursor()
@@ -44,6 +48,13 @@ async def register_teacher(teacher: TeacherRegistration, db=Depends(get_db)):
         TEACHER_ID, teacher.TEACHER_MOBILE, teacher.D_NO, teacher.STREET, teacher.AREA, teacher.CITY, teacher.DISTRICT, teacher.STATE, teacher.PIN_CODE
     )
 
+    # Insert into subjects table
+    for subject in teacher.SUBJECTS:
+        cursor.execute(
+            "INSERT INTO subjects (TEACHER_ID, SUBJECT) VALUES (?, ?)",
+            TEACHER_ID, subject
+        )
+
     db.commit()
 
-    return {"message": "Teacher registration successful"}
+    return {"message": "Teacher registration successful", "TEACHER_ID": TEACHER_ID, "PASSWORD": PASSWORD}

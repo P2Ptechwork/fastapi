@@ -5,6 +5,7 @@ from webpage.sch_login import schl_router
 from webpage.tea_registration import tea_router
 from app.tea_login import tl_router
 from app.roll_no import rl_router
+from app.st_login import stl_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -32,4 +33,5 @@ app.include_router(st_router)
 app.include_router(schl_router)
 app.include_router(tea_router)
 app.include_router(tl_router)
+app.include_router(stl_router)
 app.include_router(rl_router)
