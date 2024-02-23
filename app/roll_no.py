@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from db import get_db
+from db import get_db1
 import pyodbc
 from pydantic import BaseModel
 
@@ -14,7 +14,7 @@ rl_router = APIRouter()
 
 
 @rl_router.post("/rlno")
-async def generate_roll_numbers(details: RollNumberDetails, db=Depends(get_db)):
+async def generate_roll_numbers(details: RollNumberDetails, db=Depends(get_db1)):
     cursor = db.cursor()
 
     cursor.execute("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'students' AND COLUMN_NAME = 'R_NO'")

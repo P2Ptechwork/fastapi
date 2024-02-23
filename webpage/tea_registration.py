@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from db import get_db
+from db import get_db1
 import pyodbc
 from pydantic import BaseModel
 import random
@@ -29,7 +29,7 @@ tea_router = APIRouter()
 @tea_router.post("/tregister")
 
 
-async def register_teacher(teacher: TeacherRegistration, db=Depends(get_db)):
+async def register_teacher(teacher: TeacherRegistration, db=Depends(get_db1)):
     # Generate TEACHER_ID and PASSWORD
     TEACHER_ID = ('t'+teacher.TEACHER_NAME[:2] + teacher.SCHOOL_ID[3:6] + ''.join(random.choices(string.digits, k=4))).upper()
     PASSWORD = ''.join(random.choices(string.ascii_letters + string.digits, k=10))

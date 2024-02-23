@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from db import get_db
+from db import get_db1
 import pyodbc
 from pydantic import BaseModel
 import random
@@ -27,7 +27,7 @@ async def register_school(school: SchoolRegistration):
     # Generate SCHOOL_ID and PASSWORD
     SCHOOL_ID = school.CITY[:3] + school.SCHOOL_NAME[:3] + ''.join(random.choices(string.digits, k=4))
     PASSWORD = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-    db =  get_db()
+    db =  get_db1()
     cursor = db.cursor()
 
     # Insert into schools table

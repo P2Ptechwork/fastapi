@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from db import get_db
+from db import get_db1
 import pyodbc
 from pydantic import BaseModel
 
@@ -10,7 +10,7 @@ class TeacherLogin(BaseModel):
     password: str
 
 @tl_router.post("/teacher_login")
-async def teacher_login(teacher: TeacherLogin, db=Depends(get_db)):
+async def teacher_login(teacher: TeacherLogin, db=Depends(get_db1)):
     teacherId = teacher.teacherId
     password = teacher.password
     print(teacherId, password)
