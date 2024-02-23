@@ -24,9 +24,10 @@ async def teacher_login(teacher: TeacherLogin, db=Depends(get_db)):
     cursor.execute(f"SELECT * FROM teachers WHERE TEACHER_ID = '{teacherId}' AND PASSWORD = '{password}'")
     r = cursor.fetchone()
     
-
-
+    cursor.execute("SELECT SCHOOL_NAME FROM schools WHERE SCHOOL_ID = ?", (r.SCHOOL_ID,))
+    school_name = cursor.fetchone()[0]
+    
     if r is None:
         raise HTTPException(status_code=400, detail="Invalid teacherId or password")
 
-    return {"message": "Login successful", "schoolId": r.SCHOOL_ID, "teacherName": teacher_name, "subjects": subjects}
+    return {"message": "Login successful", "schoolId": r.SCHOOL_ID,"schoolName": school_name, "teacherName": teacher_name, "subjects": subjects}
